@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <title>Retailer Master | FMCG Control</title>
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/dark-mode.css?v=3">
+    <link rel="stylesheet" href="css/retailers-styles.css?v=3">
+</head>
+
+<body>
+    <nav class="navbar">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+        <div class="nav-brand">📊 FMCG Control</div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="purchase-orders.html" class="nav-link">Purchase Orders</a>
+            <a href="returns.html" class="nav-link">Returns</a>
+            <a href="reports.html" class="nav-link">Reports</a>
+            <a href="sales-targets.html" class="nav-link">Targets</a>
+            <a href="retailers.html" class="nav-link active">Retailers</a>
+            <a href="brands-skus.html" class="nav-link">Brands & SKUs</a>
+            <a href="dispatch.html" class="nav-link">Dispatch</a>
+            <a href="credit-control.html" class="nav-link">Credit Control</a>
+
+            <!-- Notification Center -->
+            <div class="notification-wrapper">
+                <button class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+                    🔔
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                </button>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div class="notification-header">
+                        <span>Notifications</span>
+                        <span style="font-size: 12px; color: var(--text-light); cursor: pointer;"
+                            onclick="markAllRead()">Mark all read</span>
+                    </div>
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-empty">No new notifications</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header"
+            style="margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 class="page-title"
+                    style="font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    👥 Retailer Master</h1>
+                <p class="page-subtitle" style="color: var(--text-light); margin-top: 4px;">Manage your retailer network
+                    and credit limits</p>
+            </div>
+            <button class="btn-add" onclick="openRetailerModal()" id="addRetailerBtn" style="display: none;">
+                <span>➕</span> Add Retailer
+            </button>
+        </div>
+
+        <div class="card search-card glass-panel" style="margin-bottom: 24px;">
+            <div class="search-input-wrapper" style="position: relative;">
+                <span class="search-icon"
+                    style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%);">🔍</span>
+                <input type="text" id="searchRetailer" class="form-control" style="padding-left: 48px;"
+                    placeholder="Search retailers by name, area, or phone..." onkeyup="filterRetailers()">
+            </div>
+        </div>
+
+        <div class="card table-card glass-panel" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+                <table class="premium-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Area</th>
+                            <th>Phone</th>
+                            <th>Credit Limit</th>
+                            <th>Class</th>
+                            <th>Outstanding</th>
+                            <th>Days Out</th>
+                            <th>Monthly Profit</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="retailersTableBody">
+                        <!-- Skeleton Rows -->
+                        <tr>
+                            <td colspan="10" style="padding: 40px; text-align: center;">
+                                <div class="skeleton" style="width: 100%; height: 20px; margin-bottom: 10px;"></div>
+                                <div class="skeleton" style="width: 100%; height: 20px; margin-bottom: 10px;"></div>
+                                <div class="skeleton" style="width: 100%; height: 20px;"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Retailer Modal -->
+    <div id="retailerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Retailer</h2>
+                <button class="modal-close" onclick="closeRetailerModal()">&times;</button>
+            </div>
+            <form id="retailerForm">
+                <input type="hidden" id="retailerId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="retailerName">Retailer Name *</label>
+                        <input type="text" id="retailerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="retailerArea">Area / Beat</label>
+                        <input type="text" id="retailerArea">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="retailerPhone">Phone</label>
+                        <input type="text" id="retailerPhone">
+                    </div>
+                    <div class="form-group">
+                        <label for="creditLimit">Credit Limit (₹) *</label>
+                        <input type="number" id="creditLimit" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="creditClass">Credit Class *</label>
+                        <select id="creditClass" required>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="creditFrozen"> Credit Frozen
+                        </label>
+                    </div>
+                </div>
+                <div id="retailerFormError" class="error-message" style="display: none;"></div>
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeRetailerModal()"
+                        style="margin-left: 10px;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/notifications.js?v=2"></script>
+    <script src="js/security-utils.js?v=3"></script>
+    <script src="js/ui-utils.js?v=3"></script>
+    <script src="js/auth.js?v=3"></script>
+    <script src="js/retailers.js?v=3"></script>
+    <script>
+
+    </script>
+</body>
+
+</html>

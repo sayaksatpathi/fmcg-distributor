@@ -1,0 +1,61 @@
+{
+  "name": "fmcg-distributor-control-system",
+  "version": "6.0.0",
+  "description": "FMCG Distributor Control System — React + Node.js + MongoDB Edition",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "seed": "cd server && npm run seed"
+  },
+  "features": {
+    "security": [
+      "24-layer security middleware",
+      "CSP with nonces (no unsafe-inline)",
+      "TOTP-based 2FA for admins",
+      "Security event notifications",
+      "70+ automated security tests"
+    ],
+    "business": [
+      "Reports & PDF Export",
+      "Purchase Orders Management",
+      "Invoice Generation",
+      "Inventory Alerts System",
+      "Payment Reminders",
+      "Sales Targets Tracking",
+      "Returns Management",
+      "Data Backup & Restore",
+      "Dashboard Charts (Chart.js)",
+      "WhatsApp Integration",
+      "Mobile Responsive UI"
+    ]
+  },
+  "keywords": [
+    "fmcg",
+    "distributor",
+    "control-system",
+    "erp",
+    "inventory",
+    "sales"
+  ],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "sqlite3": "^5.1.6",
+    "uuid": "^9.0.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}

@@ -1,0 +1,163 @@
+/* Retailers Page Styles */
+
+/* Page Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.page-subtitle {
+    color: var(--text-light);
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+/* Search Card */
+.search-card {
+    padding: 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    background: var(--card-bg);
+}
+
+.search-input-wrapper {
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    z-index: 10;
+}
+
+.search-input-wrapper input {
+    width: 100%;
+    padding-left: 48px;
+    height: 48px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-color);
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+.search-input-wrapper input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Table Card */
+.table-card {
+    padding: 0;
+    overflow: hidden;
+    background: var(--card-bg);
+}
+
+/* Action Buttons */
+.action-btns {
+    display: flex;
+    gap: 8px;
+    position: relative;
+    z-index: 10;
+}
+
+.action-btns .btn {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 11;
+    min-width: 36px;
+    min-height: 32px;
+}
+
+.btn-add {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.2s;
+}
+
+.btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Credit Class Badges */
+.credit-class {
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.credit-class.A {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.credit-class.B {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.credit-class.C {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.credit-class.D {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.credit-green {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+.credit-yellow {
+    color: var(--warning-color);
+    font-weight: 600;
+}
+
+.credit-red {
+    color: var(--danger-color);
+    font-weight: 700;
+}

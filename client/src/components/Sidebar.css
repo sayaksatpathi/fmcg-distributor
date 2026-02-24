@@ -1,0 +1,325 @@
+﻿/* =============================================================
+   SIDEBAR  — Glassmorphism + Gradient Active Glow + Animations
+============================================================= */
+
+.sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-width);
+  background: linear-gradient(160deg, #0f0c29 0%, #1a1540 45%, #0f0c29 100%);
+  display: flex;
+  flex-direction: column;
+  z-index: 200;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 4px 0 30px rgba(0,0,0,.45), 1px 0 0 rgba(255,255,255,.05);
+}
+
+/* ── Ambient glow blobs ──────────────────────────────────── */
+.sidebar::before,
+.sidebar::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: blobPulse 6s ease-in-out infinite alternate;
+}
+.sidebar::before {
+  width: 200px; height: 200px;
+  top: -40px; left: -60px;
+  background: rgba(139,92,246,.28);
+}
+.sidebar::after {
+  width: 180px; height: 180px;
+  bottom: 60px; right: -70px;
+  background: rgba(99,102,241,.2);
+  animation-delay: -3s;
+}
+
+@keyframes blobPulse {
+  from { transform: scale(1) translate(0,0); opacity: .7; }
+  to   { transform: scale(1.2) translate(10px,15px); opacity: 1; }
+}
+
+/* ── Collapsed ───────────────────────────────────────────── */
+.sidebar:not(.open) { transform: translateX(-100%); }
+
+/* ── Children above pseudo layers ───────────────────────── */
+.sidebar > * { position: relative; z-index: 1; }
+
+/* ── Mobile overlay ──────────────────────────────────────── */
+.sidebar-overlay { display: none; }
+
+/* =============================================================
+   HEADER
+============================================================= */
+.sidebar-header {
+  padding: 14px 14px 14px 58px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.logo-icon {
+  font-size: 20px;
+  width: 40px; height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow:
+    0 4px 16px rgba(0,0,0,.3),
+    inset 0 1px 0 rgba(255,255,255,.15),
+    0 0 0 4px rgba(139,92,246,.1);
+  transition: box-shadow 0.3s;
+}
+.logo-icon:hover {
+  box-shadow:
+    0 4px 20px rgba(0,0,0,.4),
+    inset 0 1px 0 rgba(255,255,255,.2),
+    0 0 0 6px rgba(139,92,246,.18);
+}
+
+.logo-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.logo-sub {
+  font-size: 10px;
+  color: rgba(255,255,255,.35);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+
+/* =============================================================
+   NAV SCROLL AREA
+============================================================= */
+.sidebar-nav {
+  flex: 1;
+  padding: 6px 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.sidebar-nav::-webkit-scrollbar { display: none; }
+
+/* ── Section labels ──────────────────────────────────────── */
+.nav-section-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,.2);
+  text-transform: uppercase;
+  padding: 16px 10px 4px;
+  user-select: none;
+}
+
+/* ── Nav items ───────────────────────────────────────────── */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 11px;
+  border-radius: 10px;
+  color: rgba(255,255,255,.5);
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    transform 0.18s cubic-bezier(0.4,0,0.2,1),
+    box-shadow 0.18s ease;
+}
+
+/* Glass shimmer sweep on hover */
+.nav-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.04) 50%, transparent 100%);
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+  pointer-events: none;
+}
+.nav-item:hover::after { transform: translateX(100%); }
+
+.nav-item:hover {
+  background: rgba(255,255,255,.07);
+  color: rgba(255,255,255,.9);
+  transform: translateX(3px);
+  box-shadow: 0 2px 12px rgba(0,0,0,.15);
+}
+
+/* Active — glass card + gradient glow */
+.nav-item.active {
+  background: rgba(99,102,241,.18);
+  color: #fff;
+  font-weight: 600;
+  transform: translateX(0);
+  box-shadow:
+    0 0 0 1px rgba(165,180,252,.2),
+    0 4px 20px rgba(99,102,241,.3),
+    inset 0 1px 0 rgba(255,255,255,.1);
+}
+
+/* Active left accent bar */
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, #c7d2fe, #818cf8, #6366f1);
+  box-shadow: 0 0 8px rgba(165,180,252,.7);
+}
+
+/* ── Icon ────────────────────────────────────────────────── */
+.nav-icon {
+  font-size: 14px;
+  width: 22px; height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 7px;
+  transition: transform 0.2s cubic-bezier(0.4,0,0.2,1), background 0.2s;
+}
+.nav-item:hover  .nav-icon { transform: scale(1.15); }
+.nav-item.active .nav-icon {
+  background: rgba(165,180,252,.12);
+  box-shadow: 0 0 10px rgba(165,180,252,.25);
+}
+
+/* ── Label ───────────────────────────────────────────────── */
+.nav-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =============================================================
+   FOOTER — sticky user dock (glassmorphism)
+============================================================= */
+.sidebar-footer {
+  flex-shrink: 0;
+  padding: 10px 10px 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: rgba(255,255,255,.04);
+  border-top: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: 11px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+  transition: background 0.2s;
+}
+.user-info:hover { background: rgba(255,255,255,.09); }
+
+.user-avatar {
+  width: 30px; height: 30px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: avatarGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes avatarGlow {
+  from { box-shadow: 0 3px 10px rgba(99,102,241,.5),  0 0 0 2px rgba(165,180,252,.15); }
+  to   { box-shadow: 0 3px 14px rgba(139,92,246,.7), 0 0 0 3px rgba(196,181,253,.3); }
+}
+
+.user-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,.88);
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 10px;
+  color: rgba(255,255,255,.35);
+  text-transform: capitalize;
+  letter-spacing: 0.02em;
+}
+
+.sidebar-logout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 9px;
+  background: rgba(239,68,68,.08);
+  border: 1px solid rgba(239,68,68,.15);
+  color: rgba(252,165,165,.75);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: all 0.18s ease;
+}
+.sidebar-logout-btn:hover {
+  background: rgba(239,68,68,.18);
+  border-color: rgba(239,68,68,.3);
+  color: #fca5a5;
+  box-shadow: 0 0 14px rgba(239,68,68,.2);
+  transform: translateY(-1px);
+}
+.sidebar-logout-btn:active { transform: translateY(0); }
+
+/* =============================================================
+   MOBILE
+============================================================= */
+@media (max-width: 768px) {
+  .sidebar.open {
+    box-shadow: 8px 0 40px rgba(0,0,0,.6), 1px 0 0 rgba(255,255,255,.05);
+  }
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 199;
+  }
+}

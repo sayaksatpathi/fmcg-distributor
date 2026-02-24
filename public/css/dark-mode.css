@@ -1,0 +1,676 @@
+/* ═══════════════════════════════════════════════════════════════
+   UNIFIED DARK MODE STYLES
+   This file provides consistent dark mode styling across all pages
+   Include AFTER style.css and BEFORE page-specific styles
+   
+   Supports TWO methods:
+   1. Auto-detection via @media (prefers-color-scheme: dark)
+   2. Manual toggle via .dark-mode class on html element
+   
+   The .light-mode class forces light mode even if system is dark
+═══════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════
+   THEME TOGGLE BUTTON STYLES
+═══════════════════════════════════════════════════════════════ */
+.theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(99, 102, 241, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    margin-left: 8px;
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(99, 102, 241, 0.2);
+    transform: scale(1.1);
+}
+
+.theme-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+.theme-icon {
+    line-height: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DARK MODE STYLES
+   Applies when:
+   1. System prefers dark AND html doesn't have .light-mode class
+   2. OR html has .dark-mode class (manual override)
+═══════════════════════════════════════════════════════════════ */
+
+/* Auto dark mode (respects system preference, unless .light-mode is forced) */
+@media (prefers-color-scheme: dark) {
+    html:not(.light-mode) {
+
+        /* ═══════════════════════════════════════════════════════════════
+       SKELETON LOADERS - Dark Mode Only
+    ═══════════════════════════════════════════════════════════════ */
+        .skeleton {
+            background: #334155;
+            background-image: linear-gradient(90deg,
+                    #334155 0%,
+                    #475569 20%,
+                    #334155 40%,
+                    #334155 100%);
+            background-size: 200% 100%;
+            animation: shimmer-dark 1.5s infinite linear;
+            border-radius: 6px;
+            color: transparent !important;
+        }
+
+        @keyframes shimmer-dark {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       TAB BUTTONS - Enhanced Dark Mode Visibility
+    ═══════════════════════════════════════════════════════════════ */
+        .tab-btn,
+        .pill-tab {
+            color: #94a3b8;
+        }
+
+        .tab-btn:hover,
+        .pill-tab:hover {
+            color: #e2e8f0;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .tab-btn.active {
+            color: #a5b4fc;
+            border-bottom-color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .pill-tab.active {
+            background: #6366f1;
+            color: white;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       STATUS BADGES - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .status-badge.pending,
+        .status-pill.pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-badge.approved,
+        .status-badge.completed,
+        .status-badge.active,
+        .status-pill.active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-badge.rejected,
+        .status-badge.cancelled,
+        .status-pill.cancelled {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .status-badge.partial {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .status-badge.processed {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       TYPE BADGES - Dark Mode (Returns page and similar)
+    ═══════════════════════════════════════════════════════════════ */
+        .return-type-badge.type-damaged,
+        .type-damaged {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .return-type-badge.type-expired,
+        .type-expired {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .return-type-badge.type-customer_return,
+        .type-customer_return {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .return-type-badge.type-wrong_product,
+        .type-wrong_product {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       CREDIT CLASS BADGES - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .credit-class.A,
+        .credit-A {
+            background: rgba(22, 163, 74, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(22, 163, 74, 0.3);
+        }
+
+        .credit-class.B,
+        .credit-B {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .credit-class.C,
+        .credit-C {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .credit-class.D,
+        .credit-D {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       PAYMENT & MARGIN BADGES - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .payment-badge.cash {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+
+        .payment-badge.credit {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+        }
+
+        .margin-badge.high {
+            color: #4ade80;
+        }
+
+        .margin-badge.medium {
+            color: #fbbf24;
+        }
+
+        .margin-badge.low {
+            color: #f87171;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       DAYS BADGES (Credit Control) - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .days-badge {
+            background: rgba(51, 65, 85, 0.5);
+            color: #e2e8f0;
+        }
+
+        .days-badge.days-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+        }
+
+        .days-badge.days-critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       ACTION BUTTONS - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .btn-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-success:hover {
+            background: rgba(16, 185, 129, 0.4);
+            color: #34d399;
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.4);
+            color: #f87171;
+        }
+
+        .action-btn {
+            background: rgba(51, 65, 85, 0.5);
+            color: #94a3b8;
+        }
+
+        .action-btn:hover {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-remove {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        .btn-remove:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* Secondary and Modal Buttons */
+        .btn-secondary {
+            background: rgba(71, 85, 105, 0.5);
+            color: #e2e8f0;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(71, 85, 105, 0.8);
+            color: white;
+        }
+
+        /* Add Item Button (dashed border style) */
+        .btn-add-item,
+        button[onclick*="addPOItemRow"],
+        button[onclick*="addItem"] {
+            background: rgba(99, 102, 241, 0.1) !important;
+            color: #a5b4fc !important;
+            border: 2px dashed rgba(99, 102, 241, 0.4) !important;
+        }
+
+        .btn-add-item:hover,
+        button[onclick*="addPOItemRow"]:hover,
+        button[onclick*="addItem"]:hover {
+            background: rgba(99, 102, 241, 0.2) !important;
+            border-color: #6366f1 !important;
+        }
+
+        /* Modal Submit Button */
+        .modal-content .btn-primary,
+        .modal .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+        }
+
+        .modal-content .btn-primary:hover,
+        .modal .btn-primary:hover {
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Row Total in modal tables */
+        .row-total,
+        .items-table td.row-total {
+            color: #a5b4fc !important;
+            font-weight: 600;
+        }
+
+
+        /* ═══════════════════════════════════════════════════════════════
+       GLASS PANELS & CARDS - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .glass-panel,
+        .modal-content.glass-panel {
+            background: rgba(30, 41, 59, 0.95) !important;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .tabs-card,
+        .tabs-container {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .tabs-card .tabs,
+        .tabs-container .tabs {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       PREMIUM TABLE - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .premium-table thead,
+        .leaderboard-table thead {
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        .premium-table th,
+        .leaderboard-table th {
+            color: #94a3b8 !important;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+        }
+
+        .premium-table td,
+        .leaderboard-table td {
+            color: #e2e8f0 !important;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+        }
+
+        .premium-table tbody tr:hover,
+        .leaderboard-table tbody tr:hover {
+            background: rgba(99, 102, 241, 0.08);
+        }
+
+        /* PO Number styling */
+        .po-number {
+            color: #a5b4fc !important;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       FORM ELEMENTS - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .form-control,
+        .search-input-wrapper input,
+        .search-wrapper input,
+        .filters-bar input,
+        .filters-bar select,
+        .items-table input,
+        .items-table select {
+            background: #1e293b;
+            border-color: #475569;
+            color: #f1f5f9;
+        }
+
+        .form-control:focus,
+        .search-input-wrapper input:focus,
+        .search-wrapper input:focus {
+            background: #334155;
+            border-color: #6366f1;
+        }
+
+        /* Date range inputs */
+        .date-range {
+            background: #1e293b;
+            border-color: #475569;
+        }
+
+        .date-range input[type="date"] {
+            color: #f1f5f9;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       FILTERS BAR & SEARCH - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .filters-bar,
+        .search-card,
+        .search-bar {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(148, 163, 184, 0.1);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       AGING BUCKETS (Credit Control) - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .aging-bucket {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(148, 163, 184, 0.1);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       TARGET CARDS & WIDGETS - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .target-card,
+        .widget {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(148, 163, 184, 0.1);
+        }
+
+        .target-card:hover,
+        .widget:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .progress-bar-bg {
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       SUMMARY CARDS (Reports) - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .summary-cards {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .summary-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(148, 163, 184, 0.1);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       ITEM ROWS (Dispatch) - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .item-row {
+            background: rgba(30, 41, 59, 0.5);
+            border-color: rgba(148, 163, 184, 0.1);
+        }
+
+        .item-row:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-add-item {
+            border-color: rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+        }
+
+        .btn-add-item:hover {
+            border-color: #6366f1;
+            color: #a5b4fc;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       CREDIT INFO - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .credit-info {
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       READ-ONLY INPUTS - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        input[readonly] {
+            background: rgba(51, 65, 85, 0.5) !important;
+            color: #94a3b8;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       REPORT PLACEHOLDER - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .report-placeholder {
+            color: #94a3b8;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       EMPTY STATES - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .empty-state h3,
+        .premium-table td h4 {
+            color: #e2e8f0 !important;
+        }
+
+        .empty-state p,
+        .premium-table td p {
+            color: #94a3b8 !important;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       TOAST NOTIFICATIONS - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .toast {
+            background: rgba(30, 41, 59, 0.95);
+            border-color: rgba(148, 163, 184, 0.1);
+        }
+
+        .toast.success {
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.2) 0%, rgba(30, 41, 59, 0.95) 30%);
+        }
+
+        .toast.warning {
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.2) 0%, rgba(30, 41, 59, 0.95) 30%);
+        }
+
+        .toast.error {
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.2) 0%, rgba(30, 41, 59, 0.95) 30%);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       LOADING OVERLAY - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .loading-overlay {
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+       MODAL ENHANCEMENTS - Dark Mode
+    ═══════════════════════════════════════════════════════════════ */
+        .modal-header {
+            border-color: rgba(148, 163, 184, 0.15);
+        }
+
+        .modal-footer {
+            border-color: rgba(148, 163, 184, 0.15);
+        }
+
+        .close-btn {
+            color: #94a3b8;
+        }
+
+        .close-btn:hover {
+            color: #f87171;
+        }
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MANUAL DARK MODE (when .dark-mode class is applied via toggle)
+   These are the same styles duplicated for the manual toggle class
+═══════════════════════════════════════════════════════════════ */
+html.dark-mode {
+    /* Base Colors */
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --border-color: rgba(148, 163, 184, 0.15);
+    --text-color: #f1f5f9;
+    --text-light: #94a3b8;
+    --text-muted: #64748b;
+    --glass-bg: rgba(30, 41, 59, 0.85);
+    --glass-border: rgba(148, 163, 184, 0.1);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+}
+
+html.dark-mode body {
+    background-color: #0f172a;
+    color: #f1f5f9;
+}
+
+html.dark-mode .card,
+html.dark-mode .stat-card,
+html.dark-mode .widget-card,
+html.dark-mode .quick-action-card,
+html.dark-mode .data-card,
+html.dark-mode .modal-content,
+html.dark-mode .form-group input,
+html.dark-mode .form-group select,
+html.dark-mode .form-group textarea {
+    background: #1e293b;
+    border-color: rgba(148, 163, 184, 0.15);
+    color: #f1f5f9;
+}
+
+html.dark-mode .navbar {
+    background: rgba(15, 23, 42, 0.95);
+    border-color: rgba(148, 163, 184, 0.1);
+}
+
+html.dark-mode .sidebar {
+    background: #0f172a;
+    border-color: rgba(148, 163, 184, 0.1);
+}
+
+html.dark-mode table,
+html.dark-mode .data-table {
+    background: #1e293b;
+}
+
+html.dark-mode th {
+    background: #334155;
+    color: #e2e8f0;
+    border-color: rgba(148, 163, 184, 0.15);
+}
+
+html.dark-mode td {
+    border-color: rgba(148, 163, 184, 0.1);
+    color: #e2e8f0;
+}
+
+html.dark-mode tr:hover td {
+    background: rgba(99, 102, 241, 0.05);
+}
+
+html.dark-mode .skeleton {
+    background: #334155;
+    background-image: linear-gradient(90deg, #334155 0%, #475569 20%, #334155 40%, #334155 100%);
+}
+
+html.dark-mode .modal-backdrop {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+html.dark-mode .btn-secondary {
+    background: #334155;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+html.dark-mode .btn-secondary:hover {
+    background: #475569;
+}
+
+/* Toggle button dark mode styling */
+html.dark-mode .theme-toggle-btn {
+    background: rgba(99, 102, 241, 0.2);
+    color: #fbbf24;
+}
+
+html.dark-mode .theme-toggle-btn:hover {
+    background: rgba(99, 102, 241, 0.3);
+}

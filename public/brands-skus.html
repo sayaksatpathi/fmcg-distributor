@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <title>Brands & SKUs | FMCG Control</title>
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/dark-mode.css?v=3">
+    <link rel="stylesheet" href="css/brands-skus-styles.css?v=3">
+</head>
+
+<body>
+    <nav class="navbar">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+        <div class="nav-brand">📊 FMCG Control</div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="purchase-orders.html" class="nav-link">Purchase Orders</a>
+            <a href="returns.html" class="nav-link">Returns</a>
+            <a href="reports.html" class="nav-link">Reports</a>
+            <a href="sales-targets.html" class="nav-link">Targets</a>
+            <a href="retailers.html" class="nav-link">Retailers</a>
+            <a href="brands-skus.html" class="nav-link active">Brands & SKUs</a>
+            <a href="dispatch.html" class="nav-link">Dispatch</a>
+            <a href="credit-control.html" class="nav-link">Credit Control</a>
+
+            <!-- Notification Center -->
+            <div class="notification-wrapper">
+                <button class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+                    🔔
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                </button>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div class="notification-header">
+                        <span>Notifications</span>
+                        <span style="font-size: 12px; color: var(--text-light); cursor: pointer;"
+                            onclick="markAllRead()">Mark all read</span>
+                    </div>
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-empty">No new notifications</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header" style="margin-bottom: 32px;">
+            <div>
+                <h1 class="page-title"
+                    style="font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    🏷️ Brands & SKUs</h1>
+                <p class="page-subtitle" style="color: var(--text-light); margin-top: 4px;">Manage your product catalog
+                    and pricing</p>
+            </div>
+        </div>
+
+        <div class="pill-tabs glass-panel" style="backdrop-filter: blur(8px);">
+            <button class="pill-tab active" onclick="switchTab('brands')">🏪 Brands</button>
+            <button class="pill-tab" onclick="switchTab('skus')">📦 SKUs</button>
+        </div>
+
+        <!-- Brands Tab -->
+        <div id="brandsTab" class="tab-panel">
+            <div class="section-header"
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 class="section-title">brand Master</h2>
+                <button class="btn-add" onclick="openBrandModal()" id="addBrandBtn" style="display: none;">
+                    <span>➕</span> Add Brand
+                </button>
+            </div>
+            <div class="card table-card glass-panel" style="padding: 0; overflow: hidden;">
+                <div class="table-responsive">
+                    <table class="premium-table">
+                        <thead>
+                            <tr>
+                                <th>Brand Name</th>
+                                <th>Margin Slab (%)</th>
+                                <th>Capital Invested</th>
+                                <th>Monthly Profit</th>
+                                <th>Capital ROI (%)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="brandsTableBody">
+                            <tr>
+                                <td colspan="6" style="padding: 40px; text-align: center;">
+                                    <div class="skeleton" style="width: 100%; height: 20px; margin-bottom: 10px;"></div>
+                                    <div class="skeleton" style="width: 100%; height: 20px;"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SKUs Tab -->
+        <div id="skusTab" class="tab-panel hidden">
+            <div class="section-header"
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 class="section-title">SKU Master</h2>
+                <button class="btn-add" onclick="openSKUModal()" id="addSKUBtn" style="display: none;">
+                    <span>➕</span> Add SKU
+                </button>
+            </div>
+            <div class="card table-card glass-panel" style="padding: 0; overflow: hidden;">
+                <div class="search-bar" style="padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                    <div class="search-input-wrapper" style="position: relative; max-width: 400px;">
+                        <span class="search-icon"
+                            style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%);">🔍</span>
+                        <input type="text" id="searchSKU" class="form-control" style="padding-left: 48px;"
+                            placeholder="Search SKUs..." onkeyup="filterSKUs()">
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="premium-table">
+                        <thead>
+                            <tr>
+                                <th>SKU Name</th>
+                                <th>Brand</th>
+                                <th>Purchase Price</th>
+                                <th>Selling Price</th>
+                                <th>Margin %</th>
+                                <th>Stock</th>
+                                <th>Avg Monthly</th>
+                                <th>Inventory Days</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="skusTableBody">
+                            <tr>
+                                <td colspan="10" style="padding: 40px; text-align: center;">
+                                    <div class="skeleton" style="width: 100%; height: 20px; margin-bottom: 10px;"></div>
+                                    <div class="skeleton" style="width: 100%; height: 20px;"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Brand Modal -->
+    <div id="brandModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Brand</h2>
+                <button class="modal-close" onclick="closeBrandModal()">&times;</button>
+            </div>
+            <form id="brandForm">
+                <div class="form-group">
+                    <label for="brandName">Brand Name *</label>
+                    <input type="text" id="brandName" required>
+                </div>
+                <div class="form-group">
+                    <label for="marginSlab">Margin Slab (%)</label>
+                    <input type="number" id="marginSlab" step="0.01">
+                </div>
+                <div id="brandFormError" class="error-message" style="display: none;"></div>
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeBrandModal()"
+                        style="margin-left: 10px;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SKU Modal -->
+    <div id="skuModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="skuModalTitle">Add SKU</h2>
+                <button class="modal-close" onclick="closeSKUModal()">&times;</button>
+            </div>
+            <form id="skuForm">
+                <input type="hidden" id="skuId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="skuName">SKU Name *</label>
+                        <input type="text" id="skuName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="skuBrand">Brand *</label>
+                        <select id="skuBrand" required></select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="purchasePrice">Purchase Price (₹) *</label>
+                        <input type="number" id="purchasePrice" step="0.01" required onchange="calculateSKUMargin()">
+                    </div>
+                    <div class="form-group">
+                        <label for="sellingPrice">Selling Price (₹) *</label>
+                        <input type="number" id="sellingPrice" step="0.01" required onchange="calculateSKUMargin()">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="marginPercent">Margin %</label>
+                        <input type="number" id="marginPercent" step="0.01" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="stockInHand">Stock in Hand *</label>
+                        <input type="number" id="stockInHand" step="0.01" required>
+                    </div>
+                </div>
+                <div id="skuFormError" class="error-message" style="display: none;"></div>
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeSKUModal()"
+                        style="margin-left: 10px;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/notifications.js?v=2"></script>
+    <script src="js/security-utils.js?v=3"></script>
+    <script src="js/ui-utils.js?v=3"></script>
+    <script src="js/auth.js?v=3"></script>
+    <script src="js/brands-skus.js?v=3"></script>
+    <script>
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <title>Daily Dispatch | FMCG Control</title>
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/dark-mode.css?v=3">
+    <link rel="stylesheet" href="css/dispatch-styles.css?v=3">
+</head>
+
+<body>
+    <nav class="navbar">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+        <div class="nav-brand">📊 FMCG Control</div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="purchase-orders.html" class="nav-link">Purchase Orders</a>
+            <a href="returns.html" class="nav-link">Returns</a>
+            <a href="reports.html" class="nav-link">Reports</a>
+            <a href="sales-targets.html" class="nav-link">Targets</a>
+            <a href="retailers.html" class="nav-link">Retailers</a>
+            <a href="brands-skus.html" class="nav-link">Brands & SKUs</a>
+            <a href="dispatch.html" class="nav-link active">Dispatch</a>
+            <a href="credit-control.html" class="nav-link">Credit Control</a>
+
+            <!-- Notification Center -->
+            <div class="notification-wrapper">
+                <button class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+                    🔔
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                </button>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div class="notification-header">
+                        <span>Notifications</span>
+                        <span style="font-size: 12px; color: var(--text-light); cursor: pointer;"
+                            onclick="markAllRead()">Mark all read</span>
+                    </div>
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-empty">No new notifications</div>
+                    </div>
+                </div>
+            </div>
+
+            <span class="nav-user" id="navUser"></span>
+            <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">📦 Daily Dispatch</h1>
+                <p class="page-subtitle">Create new bill entries and manage dispatches</p>
+            </div>
+        </div>
+
+        <div class="glass-panel form-card">
+            <form id="dispatchForm">
+                <h3 class="form-section-title">📋 Basic Details</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dispatchDate">Date *</label>
+                        <input type="date" id="dispatchDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dispatchRetailer">Retailer *</label>
+                        <select id="dispatchRetailer" required onchange="checkRetailerCredit()"></select>
+                        <div id="retailerCreditInfo" class="credit-info" style="display: none;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="paymentType">Payment Type *</label>
+                        <select id="paymentType" required onchange="checkRetailerCredit()">
+                            <option value="cash">💵 Cash</option>
+                            <option value="credit">💳 Credit</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3 class="form-section-title">🛒 Items</h3>
+                <div id="itemsContainer">
+                    <div class="item-row">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label>SKU *</label>
+                                <select class="item-sku" required>
+                                    <option value="">Select SKU</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label>Quantity *</label>
+                                <input type="number" class="item-quantity" step="0.01" required min="0.01">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label>Stock Available</label>
+                                <input type="text" class="item-stock" readonly>
+                            </div>
+                            <div class="form-group" style="flex: 0.5; align-self: flex-end;">
+                                <button type="button" class="btn-remove" onclick="removeItem(this)">✕ Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn-add-item" onclick="addItemRow()">
+                    <span>➕</span> Add Another Item
+                </button>
+
+                <div id="dispatchFormError" class="error-message" style="display: none; margin-top: 20px;"></div>
+                <div id="dispatchFormSuccess" class="success-message" style="display: none; margin-top: 20px;"></div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">
+                        <span>💾</span> Save Dispatch
+                    </button>
+                    <button type="button" class="btn-reset" onclick="resetForm()">🔄 Reset</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="glass-panel table-card">
+            <div class="table-header">
+                <h2 class="table-title">📜 Recent Dispatches</h2>
+            </div>
+            <div class="table-container">
+                <table class="premium-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Retailer</th>
+                            <th>Items</th>
+                            <th>Payment</th>
+                            <th>Gross Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentDispatchesBody">
+                        <tr>
+                            <td colspan="5" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/notifications.js?v=2"></script>
+    <script src="js/security-utils.js?v=3"></script>
+    <script src="js/ui-utils.js?v=3"></script>
+    <script src="js/auth.js?v=3"></script>
+    <script src="js/dispatch.js?v=3"></script>
+    <script>
+        document.getElementById('dispatchDate').value = new Date().toISOString().split('T')[0];
+    </script>
+</body>
+
+</html>

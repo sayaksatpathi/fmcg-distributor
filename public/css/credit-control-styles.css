@@ -1,0 +1,162 @@
+/* Credit Control Styles */
+
+/* Aging Analysis Grid */
+.aging-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+}
+
+.aging-bucket {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s;
+}
+
+.aging-bucket:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.aging-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.aging-value {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.section-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.section-icon.aging {
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+}
+
+.section-icon.risk {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.section-icon.cash {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+/* Tables */
+.days-badge {
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.days-badge.days-warning {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.days-badge.days-critical {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.credit-class {
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.credit-A {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.credit-B {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.credit-C {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.credit-D {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Action Buttons */
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #f1f5f9;
+    color: var(--text-light);
+}
+
+.action-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.action-btn.freeze:hover {
+    background: #ef4444;
+}
+
+.action-btn.limit:hover {
+    background: #f59e0b;
+}
+
+/* Layout */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-top: 32px;
+}
+
+@media (min-width: 1024px) {
+    .content-grid {
+        grid-template-columns: 2fr 1fr;
+        /* Risk table wider than Cash table */
+    }
+}

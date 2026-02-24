@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <title>Profit Analysis | FMCG Control</title>
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/dark-mode.css?v=3">
+    <style>
+        /* Premium Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+            animation: fadeInUp 0.5s ease forwards;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+
+        .page-subtitle {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Date Filters */
+        .date-filters {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--card-bg);
+            padding: 16px 20px;
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .date-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .date-group input {
+            padding: 10px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            font-size: 14px;
+            transition: all var(--transition-fast);
+        }
+
+        .date-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+
+        /* Premium Tabs */
+        .tabs-container {
+            background: var(--card-bg);
+            padding: 8px;
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-sm);
+            display: inline-flex;
+            gap: 4px;
+            margin-bottom: 28px;
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.1s;
+            opacity: 0;
+        }
+
+        .tab-btn {
+            padding: 12px 28px;
+            border: none;
+            background: transparent;
+            border-radius: var(--border-radius-lg);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-light);
+            transition: all var(--transition-fast);
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-color);
+            background: var(--primary-light);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Tab Content */
+        .tab-panel {
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .tab-panel.hidden {
+            display: none;
+        }
+
+        /* Premium Table Card */
+        .table-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .table-card .table-container {
+            overflow-x: auto;
+        }
+
+        .table-card table {
+            margin: 0;
+            border-radius: 0;
+        }
+
+        /* Rank Badge */
+        .rank-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .rank-badge.gold {
+            background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
+            color: #92400e;
+            box-shadow: 0 4px 12px rgba(252, 211, 77, 0.4);
+        }
+
+        .rank-badge.silver {
+            background: linear-gradient(135deg, #f3f4f6 0%, #d1d5db 100%);
+            color: #4b5563;
+            box-shadow: 0 4px 12px rgba(209, 213, 219, 0.4);
+        }
+
+        .rank-badge.bronze {
+            background: linear-gradient(135deg, #fed7aa 0%, #fb923c 100%);
+            color: #9a3412;
+            box-shadow: 0 4px 12px rgba(251, 146, 60, 0.4);
+        }
+
+        .rank-badge.normal {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--text-light);
+        }
+
+        /* ROI Badge */
+        .roi-badge {
+            padding: 6px 12px;
+            border-radius: var(--border-radius-full);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .roi-badge.high {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #059669;
+        }
+
+        .roi-badge.medium {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #d97706;
+        }
+
+        .roi-badge.low {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #dc2626;
+        }
+
+        /* Profit Value */
+        .profit-value {
+            font-weight: 700;
+            color: #059669;
+        }
+
+        .profit-value.negative {
+            color: #dc2626;
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+            }
+
+            .date-filters {
+                flex-direction: column;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+        <div class="nav-brand">📊 FMCG Control</div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="purchase-orders.html" class="nav-link">Purchase Orders</a>
+            <a href="returns.html" class="nav-link">Returns</a>
+            <a href="reports.html" class="nav-link">Reports</a>
+            <a href="sales-targets.html" class="nav-link">Targets</a>
+            <a href="retailers.html" class="nav-link">Retailers</a>
+            <a href="brands-skus.html" class="nav-link">Brands & SKUs</a>
+            <a href="dispatch.html" class="nav-link">Dispatch</a>
+            <a href="credit-control.html" class="nav-link">Credit Control</a>
+            <a href="profit-analysis.html" class="nav-link active">Profit Analysis</a>
+            <span class="nav-user" id="navUser"></span>
+            <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">📈 Profit Analysis</h1>
+                <p class="page-subtitle">Analyze profitability by brand, retailer, and SKU</p>
+            </div>
+            <div class="date-filters">
+                <div class="date-group">
+                    <label>📅 Start</label>
+                    <input type="date" id="startDate" onchange="loadProfitData()">
+                </div>
+                <div class="date-group">
+                    <label>📅 End</label>
+                    <input type="date" id="endDate" onchange="loadProfitData()">
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('brand')">🏪 By Brand</button>
+            <button class="tab-btn" onclick="switchTab('retailer')">👥 By Retailer</button>
+            <button class="tab-btn" onclick="switchTab('sku')">📦 By SKU</button>
+        </div>
+
+        <div id="brandTab" class="tab-panel">
+            <div class="table-card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Brand</th>
+                                <th>Profit (₹)</th>
+                                <th>Capital Invested</th>
+                                <th>ROI %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="brandProfitBody">
+                            <tr>
+                                <td colspan="5" class="text-center">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="retailerTab" class="tab-panel hidden">
+            <div class="table-card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Retailer</th>
+                                <th>Profit (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="retailerProfitBody">
+                            <tr>
+                                <td colspan="3" class="text-center">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="skuTab" class="tab-panel hidden">
+            <div class="table-card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>SKU</th>
+                                <th>Brand</th>
+                                <th>Profit (₹)</th>
+                                <th>Quantity Sold</th>
+                            </tr>
+                        </thead>
+                        <tbody id="skuProfitBody">
+                            <tr>
+                                <td colspan="5" class="text-center">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/notifications.js?v=2"></script>
+    <script src="js/security-utils.js?v=3"></script>
+    <script src="js/ui-utils.js?v=3"></script>
+    <script src="js/auth.js?v=3"></script>
+    <script src="js/profit-analysis.js?v=3"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const date = new Date();
+            document.getElementById('startDate').value = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
+            document.getElementById('endDate').value = new Date().toISOString().split('T')[0];
+        });
+
+
+    </script>
+</body>
+
+</html>

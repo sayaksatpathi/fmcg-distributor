@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <title>Weekly Review | FMCG Control</title>
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/dark-mode.css?v=3">
+    <style>
+        /* Premium Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+
+        .page-subtitle {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Premium Review Cards */
+        .review-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 28px;
+            overflow: hidden;
+            transition: all var(--transition-normal);
+        }
+
+        .review-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .review-card:nth-child(1) {
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.1s;
+            opacity: 0;
+        }
+
+        .review-card:nth-child(2) {
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .review-card:nth-child(3) {
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+
+        .review-card:nth-child(4) {
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.4s;
+            opacity: 0;
+        }
+
+        .review-header {
+            padding: 24px 28px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .review-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--border-radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .review-icon.stop {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        }
+
+        .review-icon.remove {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+
+        .review-icon.expand {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        }
+
+        .review-icon.credit {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        }
+
+        .review-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        .review-subtitle {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        /* Premium Table */
+        .review-card .table-container {
+            overflow-x: auto;
+        }
+
+        .review-card table {
+            margin: 0;
+            border-radius: 0;
+        }
+
+        /* Action Tags */
+        .action-tag {
+            padding: 6px 14px;
+            border-radius: var(--border-radius-full);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .action-tag.stop {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #dc2626;
+        }
+
+        .action-tag.warn {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #d97706;
+        }
+
+        .action-tag.expand {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #059669;
+        }
+
+        .action-tag.dead {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            color: #6b7280;
+        }
+
+        /* Credit Summary */
+        .credit-summary {
+            padding: 28px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-item {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: var(--border-radius-lg);
+            padding: 20px;
+            text-align: center;
+            transition: all var(--transition-fast);
+            border: 1px solid var(--border-color);
+        }
+
+        .summary-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-color);
+        }
+
+        .summary-item.danger .summary-value {
+            color: #dc2626;
+        }
+
+        .summary-item.warning .summary-value {
+            color: #d97706;
+        }
+
+        .summary-item.success .summary-value {
+            color: #059669;
+        }
+
+        /* ROI Badge */
+        .roi-badge {
+            padding: 6px 12px;
+            border-radius: var(--border-radius-full);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .roi-badge.high {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #059669;
+        }
+
+        .roi-badge.medium {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #d97706;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+        <div class="nav-brand">📊 FMCG Control</div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="purchase-orders.html" class="nav-link">Purchase Orders</a>
+            <a href="returns.html" class="nav-link">Returns</a>
+            <a href="reports.html" class="nav-link">Reports</a>
+            <a href="sales-targets.html" class="nav-link">Targets</a>
+            <a href="retailers.html" class="nav-link">Retailers</a>
+            <a href="brands-skus.html" class="nav-link">Brands & SKUs</a>
+            <a href="dispatch.html" class="nav-link">Dispatch</a>
+            <a href="credit-control.html" class="nav-link">Credit Control</a>
+            <a href="profit-analysis.html" class="nav-link">Profit Analysis</a>
+            <a href="weekly-review.html" class="nav-link active" id="weeklyReviewLink">Weekly Review</a>
+            <a href="product-test.html" class="nav-link" id="productTestLink" style="display: none;">Product Test</a>
+            <a href="excel-import.html" class="nav-link" id="excelImportLink" style="display: none;">Excel Import</a>
+            <span class="nav-user" id="navUser"></span>
+            <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">📋 Weekly Review</h1>
+                <p class="page-subtitle">Decision-ready insights for business optimization</p>
+            </div>
+        </div>
+
+        <div class="review-card">
+            <div class="review-header">
+                <div class="review-icon stop">🛑</div>
+                <div>
+                    <h2 class="review-title">Retailers to STOP / WARN</h2>
+                    <p class="review-subtitle">High-risk accounts requiring immediate attention</p>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Retailer</th>
+                            <th>Outstanding</th>
+                            <th>Days Outstanding</th>
+                            <th>Credit Limit</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="riskyRetailersBody">
+                        <tr>
+                            <td colspan="5" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="review-card">
+            <div class="review-header">
+                <div class="review-icon remove">❌</div>
+                <div>
+                    <h2 class="review-title">SKUs to REMOVE</h2>
+                    <p class="review-subtitle">Non-moving inventory blocking capital</p>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Brand</th>
+                            <th>Stock in Hand</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="deadSkusBody">
+                        <tr>
+                            <td colspan="4" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="review-card">
+            <div class="review-header">
+                <div class="review-icon expand">📈</div>
+                <div>
+                    <h2 class="review-title">Brands to EXPAND Capital Into</h2>
+                    <p class="review-subtitle">High-ROI brands for growth investment</p>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Brand</th>
+                            <th>Monthly Profit</th>
+                            <th>Capital Invested</th>
+                            <th>ROI %</th>
+                            <th>Recommendation</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expandBrandsBody">
+                        <tr>
+                            <td colspan="5" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="review-card">
+            <div class="review-header">
+                <div class="review-icon credit">💳</div>
+                <div>
+                    <h2 class="review-title">Credit Risk Summary</h2>
+                    <p class="review-subtitle">Overall credit exposure analysis</p>
+                </div>
+            </div>
+            <div class="credit-summary" id="creditSummaryBody">
+                <div class="text-center">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/notifications.js?v=2"></script>
+    <script src="js/security-utils.js?v=3"></script>
+    <script src="js/ui-utils.js?v=3"></script>
+    <script src="js/auth.js?v=3"></script>
+    <script src="js/weekly-review.js?v=3"></script>
+    <script>
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports Center | FMCG Control</title>
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/dark-mode.css?v=3">
+</head>
+
+<body>
+    <nav class="navbar">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+        <div class="nav-brand">📊 FMCG Control</div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="purchase-orders.html" class="nav-link">Purchase Orders</a>
+            <a href="returns.html" class="nav-link">Returns</a>
+            <a href="reports.html" class="nav-link active">Reports</a>
+            <a href="sales-targets.html" class="nav-link">Targets</a>
+            <a href="retailers.html" class="nav-link">Retailers</a>
+            <a href="brands-skus.html" class="nav-link">Brands & SKUs</a>
+            <a href="dispatch.html" class="nav-link">Dispatch</a>
+            <a href="credit-control.html" class="nav-link">Credit Control</a>
+
+            <!-- Notification Center -->
+            <div class="notification-wrapper">
+                <button class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+                    🔔
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                </button>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div class="notification-header">
+                        <span>Notifications</span>
+                        <span style="font-size: 12px; color: var(--text-light); cursor: pointer;"
+                            onclick="markAllRead()">Mark all read</span>
+                    </div>
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-empty">No new notifications</div>
+                    </div>
+                </div>
+            </div>
+
+            <span class="nav-user" id="navUser"></span>
+            <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Reports Center</h1>
+
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchReport('sales')">
+                    <span>💰</span> Sales Report
+                </button>
+                <button class="tab-btn" onclick="switchReport('inventory')">
+                    <span>📦</span> Inventory Status
+                </button>
+                <button class="tab-btn" onclick="switchReport('profit')">
+                    <span>📈</span> Profit Analysis
+                </button>
+                <button class="tab-btn" onclick="switchReport('credit')">
+                    <span>⚠️</span> Credit Report
+                </button>
+            </div>
+
+            <div class="reports-controls">
+                <div class="date-range" id="dateFilters">
+                    <span>📅 Date Range:</span>
+                    <input type="date" id="startDate" class="form-control">
+                    <span style="color: var(--text-light)">to</span>
+                    <input type="date" id="endDate" class="form-control">
+                    <button class="btn btn-primary btn-update" onclick="loadCurrentReport()">
+                        🔄 Update View
+                    </button>
+                </div>
+
+                <div style="flex: 1"></div>
+
+                <button class="btn btn-success" onclick="exportReport()">
+                    📥 Export Excel/PDF
+                </button>
+            </div>
+        </div>
+
+        <div class="card glass-panel" style="padding: 0; min-height: 500px">
+            <div class="report-content" id="reportContent">
+                <div class="report-placeholder">
+                    <div class="icon">📊</div>
+                    <h3>Select a report type to begin</h3>
+                    <p>View detailed analysis of your sales, stock, and profitability</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/notifications.js?v=2"></script>
+    <script src="js/security-utils.js?v=3"></script>
+    <script src="js/ui-utils.js?v=3"></script>
+    <script src="js/auth.js?v=3"></script>
+    <script src="js/reports.js?v=3"></script>
+</body>
+
+</html>

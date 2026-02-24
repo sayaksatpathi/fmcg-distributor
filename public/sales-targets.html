@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Targets | FMCG Control</title>
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/dark-mode.css?v=3">
+    <link rel="stylesheet" href="css/sales-targets-styles.css?v=3">
+</head>
+
+<body>
+    <nav class="navbar">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+        <div class="nav-brand">📊 FMCG Control</div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="purchase-orders.html" class="nav-link">Purchase Orders</a>
+            <a href="returns.html" class="nav-link">Returns</a>
+            <a href="reports.html" class="nav-link">Reports</a>
+            <a href="sales-targets.html" class="nav-link active">Targets</a>
+            <a href="retailers.html" class="nav-link">Retailers</a>
+            <a href="brands-skus.html" class="nav-link">Brands & SKUs</a>
+            <a href="dispatch.html" class="nav-link">Dispatch</a>
+            <a href="credit-control.html" class="nav-link">Credit Control</a>
+
+            <!-- Notification Center -->
+            <div class="notification-wrapper">
+                <button class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+                    🔔
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                </button>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div class="notification-header">
+                        <span>Notifications</span>
+                        <span style="font-size: 12px; color: var(--text-light); cursor: pointer;"
+                            onclick="markAllRead()">Mark all read</span>
+                    </div>
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-empty">No new notifications</div>
+                    </div>
+                </div>
+            </div>
+
+            <span class="nav-user" id="navUser"></span>
+            <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Sales Targets & Goals</h1>
+                <p class="page-subtitle">Track performance against monthly goals</p>
+            </div>
+            <button id="createTargetBtn" class="btn btn-primary" onclick="openCreateTargetModal()">
+                + Set New Target
+            </button>
+        </div>
+
+        <div class="dashboard-widgets" id="targetSummary">
+            <div class="skeleton-card" style="height: 120px;"></div>
+            <div class="skeleton-card" style="height: 120px;"></div>
+            <div class="skeleton-card" style="height: 120px;"></div>
+        </div>
+
+        <h2 style="margin: 40px 0 20px; font-size: 20px; font-weight: 700; color: var(--text-color);">Active Targets
+        </h2>
+        <div class="charts-grid" id="targetsContainer"
+            style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+            <!-- JS Populated -->
+            <div class="target-card">
+                <div class="skeleton" style="width: 50%; height: 24px; margin-bottom: 12px; border-radius: 6px;"></div>
+                <div class="skeleton" style="width: 30%; height: 16px; margin-bottom: 24px; border-radius: 4px;"></div>
+                <div class="skeleton" style="width: 100%; height: 12px; border-radius: 6px;"></div>
+            </div>
+            <div class="target-card">
+                <div class="skeleton" style="width: 50%; height: 24px; margin-bottom: 12px; border-radius: 6px;"></div>
+                <div class="skeleton" style="width: 30%; height: 16px; margin-bottom: 24px; border-radius: 4px;"></div>
+                <div class="skeleton" style="width: 100%; height: 12px; border-radius: 6px;"></div>
+            </div>
+        </div>
+
+        <h2 style="margin: 40px 0 20px; font-size: 20px; font-weight: 700; color: var(--text-color);">Revenue
+            Leaderboard</h2>
+        <div class="leaderboard-card">
+            <div class="table-container">
+                <table class="leaderboard-table" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Revenue</th>
+                            <th>Target %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <tr>
+                            <td colspan="4" class="text-center" style="padding: 32px;">Initializing...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Target Modal -->
+    <div id="targetModal" class="modal">
+        <div class="modal-content glass-panel" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 id="modalTitle">Set Sales Target</h3>
+                <span class="close" onclick="closeTargetModal()">&times;</span>
+            </div>
+            <form id="targetForm">
+                <input type="hidden" id="targetId">
+                <div class="form-group">
+                    <label>Target Name *</label>
+                    <input type="text" id="targetName" class="form-control" placeholder="e.g., January 2025 Goal"
+                        required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Start Date *</label>
+                        <input type="date" id="startDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date *</label>
+                        <input type="date" id="endDate" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Target Revenue (₹) *</label>
+                    <input type="number" id="targetAmount" class="form-control" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Assigned To</label>
+                    <select id="assignedTo" class="form-control">
+                        <option value="">Overall Company Target</option>
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+
+                <div id="formError" class="text-danger" style="display: none; margin-bottom: 15px;"></div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeTargetModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Target</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/notifications.js?v=2"></script>
+    <script src="js/security-utils.js?v=3"></script>
+    <script src="js/ui-utils.js?v=3"></script>
+    <script src="js/auth.js?v=3"></script>
+    <script src="js/sales-targets.js?v=3"></script>
+</body>
+
+</html>

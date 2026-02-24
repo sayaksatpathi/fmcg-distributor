@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <title>Excel Import | FMCG Control</title>
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/dark-mode.css?v=3">
+    <style>
+        /* Premium Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+
+        .page-subtitle {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Premium Step Cards */
+        .step-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 24px;
+            overflow: hidden;
+            transition: all var(--transition-normal);
+        }
+
+        .step-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .step-card:nth-child(1) {
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.1s;
+            opacity: 0;
+        }
+
+        .step-card:nth-child(2) {
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .step-card:nth-child(3) {
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+
+        .step-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        .step-body {
+            padding: 24px;
+        }
+
+        /* Premium Select */
+        .import-select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            font-size: 15px;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            background: var(--card-bg);
+            cursor: pointer;
+        }
+
+        .import-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+
+        /* Premium File Upload */
+        .file-upload-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius-xl);
+            padding: 40px 24px;
+            text-align: center;
+            transition: all var(--transition-fast);
+            background: linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%);
+            cursor: pointer;
+        }
+
+        .file-upload-zone:hover {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+        }
+
+        .file-upload-zone.dragover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .file-input-hidden {
+            display: none;
+        }
+
+        /* Upload Button */
+        .btn-upload {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: var(--border-radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Mapping Container */
+        .mapping-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            padding: 16px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: var(--border-radius-lg);
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .mapping-row label {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .mapping-row select {
+            padding: 10px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            font-size: 14px;
+            transition: all var(--transition-fast);
+        }
+
+        .mapping-row select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-import {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: var(--border-radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-import:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-cancel {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-light);
+            padding: 14px 24px;
+            border-radius: var(--border-radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-cancel:hover {
+            border-color: var(--text-light);
+            color: var(--text-color);
+        }
+
+        /* Results */
+        .import-results {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .results-success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: var(--border-radius-lg);
+            padding: 20px;
+            color: #065f46;
+        }
+
+        .results-error {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: var(--border-radius-lg);
+            padding: 20px;
+            color: #991b1b;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+        <div class="nav-brand">📊 FMCG Control</div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="purchase-orders.html" class="nav-link">Purchase Orders</a>
+            <a href="returns.html" class="nav-link">Returns</a>
+            <a href="reports.html" class="nav-link">Reports</a>
+            <a href="sales-targets.html" class="nav-link">Targets</a>
+            <a href="retailers.html" class="nav-link">Retailers</a>
+            <a href="brands-skus.html" class="nav-link">Brands & SKUs</a>
+            <a href="dispatch.html" class="nav-link">Dispatch</a>
+            <a href="credit-control.html" class="nav-link">Credit Control</a>
+            <a href="profit-analysis.html" class="nav-link">Profit Analysis</a>
+            <a href="weekly-review.html" class="nav-link" id="weeklyReviewLink" style="display: none;">Weekly Review</a>
+            <a href="product-test.html" class="nav-link" id="productTestLink" style="display: none;">Product Test</a>
+            <a href="excel-import.html" class="nav-link active" id="excelImportLink">Excel Import</a>
+            <span class="nav-user" id="navUser"></span>
+            <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">📥 Excel Import</h1>
+                <p class="page-subtitle">Bulk import data from Excel spreadsheets</p>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <h2 class="step-title">Select Import Type</h2>
+            </div>
+            <div class="step-body">
+                <select id="importType" class="import-select" required onchange="resetImport()">
+                    <option value="">Choose what to import...</option>
+                    <option value="retailers">👥 Retailer Master</option>
+                    <option value="skus">📦 SKU Master</option>
+                    <option value="outstanding">💳 Outstanding Balances</option>
+                    <option value="stock">📊 Stock Levels</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="step-card" style="display: none;" id="uploadCard">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <h2 class="step-title">Upload Excel File</h2>
+            </div>
+            <div class="step-body">
+                <div class="file-upload-zone" onclick="document.getElementById('excelFile').click()">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-text">Click to upload or drag & drop</div>
+                    <div class="upload-hint">Supported formats: .xlsx, .xls</div>
+                </div>
+                <input type="file" id="excelFile" class="file-input-hidden" accept=".xlsx,.xls" required>
+                <button class="btn-upload" onclick="uploadFile()">
+                    <span>📤</span> Upload & Preview
+                </button>
+            </div>
+        </div>
+
+        <div class="step-card" style="display: none;" id="mappingCard">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <h2 class="step-title">Map Columns</h2>
+            </div>
+            <div class="step-body">
+                <div id="mappingContainer"></div>
+                <div class="action-buttons">
+                    <button class="btn-import" onclick="importData()">
+                        <span>✅</span> Import Data
+                    </button>
+                    <button class="btn-cancel" onclick="resetImport()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="importResults" class="import-results" style="display: none;"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="js/notifications.js?v=2"></script>
+    <script src="js/security-utils.js?v=3"></script>
+    <script src="js/ui-utils.js?v=3"></script>
+    <script src="js/auth.js?v=3"></script>
+    <script src="js/excel-import.js?v=3"></script>
+    <script>
+
+
+        // Drag and drop enhancement
+        const dropZone = document.querySelector('.file-upload-zone');
+        if (dropZone) {
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    document.getElementById('excelFile').files = files;
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

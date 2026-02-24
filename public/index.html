@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="FMCG Distributor Control System - Secure Login">
+    <title>FMCG Distributor Control System - Login</title>
+    <link rel="stylesheet" href="./css/style.css?v=3">
+    <link rel="stylesheet" href="./css/dark-mode.css?v=3">
+    <style>
+        /* Premium login enhancements */
+        .login-logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 16px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+            animation: float 4s ease-in-out infinite;
+            position: relative;
+        }
+
+        .login-logo-icon::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(15px);
+        }
+
+        .login-subtitle {
+            color: #475569;
+            /* Darkened from #64748b */
+            font-size: 15px;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #64748b;
+            /* Darkened from #94a3b8 */
+            padding: 6px;
+            font-size: 18px;
+            transition: all 0.2s ease;
+            border-radius: 6px;
+        }
+
+        .password-toggle:hover {
+            color: #6366f1;
+            background: #eef2ff;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #475569;
+            /* Darkened from #64748b */
+            cursor: pointer;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #6366f1;
+        }
+
+        .btn-login {
+            position: relative;
+            overflow: hidden;
+            font-size: 16px;
+            padding: 16px 28px;
+            font-weight: 700;
+        }
+
+        .btn-login::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-login:hover::before {
+            left: 100%;
+        }
+
+        .btn-login.loading {
+            pointer-events: none;
+        }
+
+        .btn-login.loading::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border: 3px solid transparent;
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 28px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            /* Darkened from #94a3b8 */
+            font-size: 13px;
+        }
+
+        .login-footer span {
+            color: #10b981;
+        }
+
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: floatParticle 15s infinite;
+        }
+
+        .particle:nth-child(1) {
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            left: 20%;
+            animation-delay: 2s;
+        }
+
+        .particle:nth-child(3) {
+            left: 30%;
+            animation-delay: 4s;
+        }
+
+        .particle:nth-child(4) {
+            left: 40%;
+            animation-delay: 6s;
+        }
+
+        .particle:nth-child(5) {
+            left: 50%;
+            animation-delay: 8s;
+        }
+
+        .particle:nth-child(6) {
+            left: 60%;
+            animation-delay: 10s;
+        }
+
+        .particle:nth-child(7) {
+            left: 70%;
+            animation-delay: 12s;
+        }
+
+        .particle:nth-child(8) {
+            left: 80%;
+            animation-delay: 14s;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: translateY(-50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(-50%) rotate(360deg);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-10px) rotate(3deg);
+            }
+        }
+
+        /* Hide until ready */
+        .login-container {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .login-container.ready {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 0.4s ease-out;
+        }
+
+        /* Input focus animations */
+        .form-group input:focus+.input-highlight {
+            transform: scaleX(1);
+        }
+
+        .input-highlight {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        /* Error state */
+        .error-message {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: linear-gradient(90deg, #fee2e2 0%, #fef2f2 100%);
+            border-radius: 10px;
+            color: #dc2626;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+    </style>
+</head>
+
+<body class="login-page">
+    <!-- Floating particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <div class="login-logo">
+                <div class="login-logo-icon">📊</div>
+                <h1>FMCG Control</h1>
+                <p class="login-subtitle">Distributor Management Portal</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required autofocus
+                        placeholder="Enter your username" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" required placeholder="Enter your password"
+                            autocomplete="current-password">
+                        <button type="button" class="password-toggle" onclick="togglePassword()"
+                            aria-label="Toggle password visibility">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+                <label class="remember-me">
+                    <input type="checkbox" id="rememberMe">
+                    Remember me on this device
+                </label>
+                <button type="submit" class="btn btn-primary btn-login">
+                    Sign In
+                </button>
+                <div id="loginError" class="error-message" style="display: none;">
+                    <span>⚠️</span>
+                    <span id="loginErrorText"></span>
+                </div>
+            </form>
+            <div class="login-footer">
+                <p>🔒 Secure login protected by <span>256-bit encryption</span></p>
+            </div>
+        </div>
+    </div>
+    <!-- notifications.js removed to prevent redirect loop -->
+    <script src="./js/security-utils.js?v=3"></script>
+    <script src="./js/ui-utils.js?v=3"></script>
+    <script src="./js/auth.js?v=3"></script>
+    <script>
+        function togglePassword() {
+            const p = document.getElementById('password');
+            const b = document.querySelector('.password-toggle');
+            if (p && b) {
+                p.type = p.type === 'password' ? 'text' : 'password';
+                b.textContent = p.type === 'password' ? '👁️' : '🙈';
+            }
+        }
+    </script>
+</body>
+
+</html>

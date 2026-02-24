@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Returns & Damages | FMCG Control</title>
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/dark-mode.css?v=3">
+    <link rel="stylesheet" href="css/returns-styles.css?v=3">
+</head>
+
+<body>
+    <nav class="navbar">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+        <div class="nav-brand">📊 FMCG Control</div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="purchase-orders.html" class="nav-link">Purchase Orders</a>
+            <a href="returns.html" class="nav-link active">Returns</a>
+            <a href="reports.html" class="nav-link">Reports</a>
+            <a href="sales-targets.html" class="nav-link">Targets</a>
+            <a href="retailers.html" class="nav-link">Retailers</a>
+            <a href="brands-skus.html" class="nav-link">Brands & SKUs</a>
+            <a href="dispatch.html" class="nav-link">Dispatch</a>
+            <a href="credit-control.html" class="nav-link">Credit Control</a>
+
+            <!-- Notification Center -->
+            <div class="notification-wrapper">
+                <button class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+                    🔔
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                </button>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div class="notification-header">
+                        <span>Notifications</span>
+                        <span style="font-size: 12px; color: var(--text-light); cursor: pointer;"
+                            onclick="markAllRead()">Mark all read</span>
+                    </div>
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-empty">No new notifications</div>
+                    </div>
+                </div>
+            </div>
+
+            <span class="nav-user" id="navUser"></span>
+            <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header" style="display:flex; justify-content:space-between; margin-bottom:20px;">
+            <div>
+                <h1>Returns & Damages Tracker</h1>
+                <p class="text-secondary">Manage returns, expired stock, and damages</p>
+            </div>
+            <button class="btn btn-primary" onclick="openReturnModal()">+ Log New Return</button>
+        </div>
+
+        <div class="card tabs-card glass-panel" style="padding: 0; overflow: hidden;">
+            <div class="tabs" style="padding: 16px 20px; border-bottom: 1px solid var(--border-color);">
+                <button class="tab-btn active" onclick="loadReturns('pending')">Pending Approval</button>
+                <button class="tab-btn" onclick="loadReturns('approved')">Processed History</button>
+                <button class="tab-btn" onclick="loadReturns('rejected')">Rejected</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="premium-table">
+                    <thead>
+                        <tr>
+                            <th>Return #</th>
+                            <th>Date</th>
+                            <th>Retailer</th>
+                            <th>Product</th>
+                            <th>Type</th>
+                            <th>Refund Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="returnsTableBody">
+                        <!-- Skeleton Rows -->
+                        <tr>
+                            <td colspan="8" style="padding: 40px; text-align: center;">
+                                <div class="skeleton" style="width: 100%; height: 20px; margin-bottom: 10px;"></div>
+                                <div class="skeleton" style="width: 100%; height: 20px; margin-bottom: 10px;"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Return Modal -->
+    <div id="returnModal" class="modal">
+        <div class="modal-content glass-panel">
+            <!-- Glass panel class handles background, removed inline style -->
+            <div class="modal-header">
+                <h3>Log New Return</h3>
+                <button class="close-btn" onclick="closeModal('returnModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createReturnForm">
+                    <div class="form-group">
+                        <label>Retailer</label>
+                        <select name="retailer_id" id="retailerSelect" class="form-control" required>
+                            <!-- JS Populated -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Product (SKU)</label>
+                        <select name="sku_id" id="skuSelect" class="form-control" required>
+                            <!-- JS Populated -->
+                        </select>
+                    </div>
+                    <div class="grid grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="number" name="quantity" class="form-control" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Return Type</label>
+                            <select name="return_type" class="form-control" required>
+                                <option value="damaged">Damaged Goods</option>
+                                <option value="expired">Expired Stock</option>
+                                <option value="customer_return">Customer Return</option>
+                                <option value="wrong_product">Wrong Delivery</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Action</label>
+                        <select name="action" class="form-control" required>
+                            <option value="credit_note">Issue Credit Note</option>
+                            <option value="replace">Replace Product</option>
+                            <option value="refund">Direct Refund</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Reason / Notes</label>
+                        <textarea name="reason" class="form-control" rows="2"
+                            placeholder="Describe the damage or reason..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width" style="margin-top: 20px;">Submit Return
+                        Log</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/notifications.js?v=2"></script>
+    <script src="js/security-utils.js?v=3"></script>
+    <script src="js/ui-utils.js?v=3"></script>
+    <script src="js/auth.js?v=3"></script>
+    <script src="js/returns.js?v=3"></script>
+</body>
+
+</html>

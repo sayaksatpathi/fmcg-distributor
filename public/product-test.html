@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <title>Product Test | FMCG Control</title>
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/dark-mode.css?v=3">
+    <style>
+        /* Premium Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+
+        .page-subtitle {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Add Button */
+        .btn-add {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: var(--border-radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Premium Table Card */
+        .table-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.1s;
+            opacity: 0;
+        }
+
+        .table-card .table-container {
+            overflow-x: auto;
+        }
+
+        .table-card table {
+            margin: 0;
+            border-radius: 0;
+        }
+
+        /* Recommendation Badge */
+        .rec-badge {
+            padding: 6px 14px;
+            border-radius: var(--border-radius-full);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .rec-badge.continue {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #059669;
+        }
+
+        .rec-badge.kill {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #dc2626;
+        }
+
+        .rec-badge.pending {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #d97706;
+        }
+
+        /* Margin Display */
+        .margin-value {
+            font-weight: 700;
+        }
+
+        .margin-value.positive {
+            color: #059669;
+        }
+
+        .margin-value.negative {
+            color: #dc2626;
+        }
+
+        /* Action Buttons */
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .action-btn:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .action-btn.update:hover {
+            border-color: #059669;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .action-btn.delete:hover {
+            border-color: #dc2626;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Premium Modal Override */
+        .modal-content {
+            max-width: 600px;
+        }
+
+        .form-group input[readonly] {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+        <div class="nav-brand">📊 FMCG Control</div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="purchase-orders.html" class="nav-link">Purchase Orders</a>
+            <a href="returns.html" class="nav-link">Returns</a>
+            <a href="reports.html" class="nav-link">Reports</a>
+            <a href="sales-targets.html" class="nav-link">Targets</a>
+            <a href="retailers.html" class="nav-link">Retailers</a>
+            <a href="brands-skus.html" class="nav-link">Brands & SKUs</a>
+            <a href="dispatch.html" class="nav-link">Dispatch</a>
+            <a href="credit-control.html" class="nav-link">Credit Control</a>
+            <a href="profit-analysis.html" class="nav-link">Profit Analysis</a>
+            <a href="weekly-review.html" class="nav-link" id="weeklyReviewLink" style="display: none;">Weekly Review</a>
+            <a href="product-test.html" class="nav-link active" id="productTestLink">Product Test</a>
+            <a href="excel-import.html" class="nav-link" id="excelImportLink" style="display: none;">Excel Import</a>
+
+            <!-- Notification Center -->
+            <div class="notification-wrapper">
+                <button class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+                    🔔
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                </button>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div class="notification-header">
+                        <span>Notifications</span>
+                        <span style="font-size: 12px; color: var(--text-light); cursor: pointer;"
+                            onclick="markAllRead()">Mark all read</span>
+                    </div>
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-empty">No new notifications</div>
+                    </div>
+                </div>
+            </div>
+
+            <span class="nav-user" id="navUser"></span>
+            <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">🧪 Product Test</h1>
+                <p class="page-subtitle">Test new products and private labels before full launch</p>
+            </div>
+            <button class="btn-add" onclick="openTestModal()">
+                <span>➕</span> Add Product Test
+            </button>
+        </div>
+
+        <div class="table-card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Batch Size</th>
+                            <th>Total Cost</th>
+                            <th>Selling Price</th>
+                            <th>Expected Margin</th>
+                            <th>Actual Margin</th>
+                            <th>Sales Qty</th>
+                            <th>Sales Revenue</th>
+                            <th>Recommendation</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTestsBody">
+                        <tr>
+                            <td colspan="10" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Test Modal -->
+    <div id="testModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🧪 Add Product Test</h2>
+                <button class="modal-close" onclick="closeTestModal()">&times;</button>
+            </div>
+            <form id="testForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productName">Product Name *</label>
+                        <input type="text" id="productName" required placeholder="Enter product name">
+                    </div>
+                    <div class="form-group">
+                        <label for="batchSize">Batch Size *</label>
+                        <input type="number" id="batchSize" step="0.01" required placeholder="e.g., 100">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="totalCost">Total Cost (₹) *</label>
+                        <input type="number" id="totalCost" step="0.01" required onchange="calculateTestMargin()"
+                            placeholder="e.g., 5000">
+                    </div>
+                    <div class="form-group">
+                        <label for="sellingPrice">Selling Price per Unit (₹) *</label>
+                        <input type="number" id="sellingPrice" step="0.01" required onchange="calculateTestMargin()"
+                            placeholder="e.g., 65">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expectedMargin">Expected Margin (%)</label>
+                        <input type="number" id="expectedMargin" step="0.01" placeholder="e.g., 15">
+                    </div>
+                    <div class="form-group">
+                        <label>Actual Margin (%)</label>
+                        <input type="text" id="actualMargin" readonly placeholder="Auto-calculated">
+                    </div>
+                </div>
+                <div id="testFormError" class="error-message" style="display: none;"></div>
+                <div style="margin-top: 24px; display: flex; gap: 12px;">
+                    <button type="submit" class="btn btn-primary">💾 Save Test</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeTestModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Performance Update Modal -->
+    <div id="performanceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📊 Update 30-Day Performance</h2>
+                <button class="modal-close" onclick="closePerformanceModal()">&times;</button>
+            </div>
+            <form id="performanceForm">
+                <input type="hidden" id="performanceTestId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="salesQuantity">Sales Quantity *</label>
+                        <input type="number" id="salesQuantity" step="0.01" required placeholder="Units sold">
+                    </div>
+                    <div class="form-group">
+                        <label for="salesRevenue">Sales Revenue (₹) *</label>
+                        <input type="number" id="salesRevenue" step="0.01" required placeholder="Total revenue">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="recommendation">Recommendation *</label>
+                    <select id="recommendation" required>
+                        <option value="">Select recommendation</option>
+                        <option value="CONTINUE">✅ CONTINUE - Expand this product</option>
+                        <option value="KILL">❌ KILL - Discontinue this product</option>
+                    </select>
+                </div>
+                <div id="performanceFormError" class="error-message" style="display: none;"></div>
+                <div style="margin-top: 24px; display: flex; gap: 12px;">
+                    <button type="submit" class="btn btn-primary">📊 Update Performance</button>
+                    <button type="button" class="btn btn-secondary" onclick="closePerformanceModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/notifications.js?v=2"></script>
+    <script src="js/security-utils.js?v=3"></script>
+    <script src="js/ui-utils.js?v=3"></script>
+    <script src="js/auth.js?v=3"></script>
+    <script src="js/product-test.js?v=3"></script>
+    <script>
+
+    </script>
+</body>
+
+</html>
