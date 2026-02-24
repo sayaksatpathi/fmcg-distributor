@@ -6,7 +6,10 @@ const SKU = require('../models/SKU');
 const Retailer = require('../models/Retailer');
 
 async function seed() {
-  const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.g9ecxr4.mongodb.net/fmcg_db?retryWrites=true&w=majority&appName=Cluster0`;
+  const uri = (process.env.MONGO_USER && process.env.MONGO_PASS && process.env.MONGO_CLUSTER)
+    ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_CLUSTER}/fmcg_db?retryWrites=true&w=majority&appName=Cluster0`
+    : process.env.MONGO_URI;
+  if (!uri) { console.error('Set MONGO_URI or MONGO_USER/MONGO_PASS/MONGO_CLUSTER in .env'); process.exit(1); }
   await mongoose.connect(uri, { tlsAllowInvalidCertificates: true });
   console.log('Connected to MongoDB');
 
