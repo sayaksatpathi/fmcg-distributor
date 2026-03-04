@@ -38,7 +38,17 @@ const healthRoutes        = require('./routes/health');
 
 // ─── App Init ─────────────────────────────────────────────────────────────────
 const app = express();
-connectDB();
+const dbPromise = connectDB();
+
+// Ensure DB is connected before handling any request (critical for serverless)
+app.use(async (req, res, next) => {
+  try {
+    await dbPromise;
+    next();
+  } catch (err) {
+    res.status(503).json({ message: 'Database connection failed', error: err.message });
+  }
+});
 
 // ─── Global Middleware ────────────────────────────────────────────────────────
 app.use(helmet());
