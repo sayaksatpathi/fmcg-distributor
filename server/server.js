@@ -46,7 +46,7 @@ app.use(compression());
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'));
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (process.env.CLIENT_URL || 'http://localhost:5173').trim(),
   credentials: true,
 }));
 
