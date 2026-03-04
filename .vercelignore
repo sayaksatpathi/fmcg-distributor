@@ -6,6 +6,6 @@ tests
 scripts
 docs
 public
-src
+/src
 .env
 *.log
