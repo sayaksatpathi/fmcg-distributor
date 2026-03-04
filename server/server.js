@@ -94,9 +94,14 @@ app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
 // ─── Error Handler ────────────────────────────────────────────────────────────
 app.use(errorHandler);
 
-// ─── Start ────────────────────────────────────────────────────────────────────
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 FMCG Server running on http://localhost:${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-});
+// ─── Export for serverless (Vercel) ──────────────────────────────────────────
+module.exports = app;
+
+// ─── Start (only when run directly, not as serverless) ───────────────────────
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`🚀 FMCG Server running on http://localhost:${PORT}`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+  });
+}

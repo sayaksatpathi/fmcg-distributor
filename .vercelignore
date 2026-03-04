@@ -1,0 +1,11 @@
+node_modules
+backups
+logs
+uploads
+tests
+scripts
+docs
+public
+src
+.env
+*.log
