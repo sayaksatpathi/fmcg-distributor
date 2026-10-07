@@ -1,10 +1,26 @@
-# FMCG Distributor Control System v5.0
+<div align="center">
 
-A comprehensive internal control system for FMCG distributors to manage retailers, inventory, sales, credit, and profit analysis.
+# 📦 FMCG Distributor Control System
 
-## 🚀 What's New in v5.0
+### A comprehensive internal control system for FMCG distributors — retailers, inventory, sales, credit, and profit analysis, hardened with enterprise-grade security.
 
-### 🔐 Security Features (100/100 Security Score)
+[![Live Demo](https://img.shields.io/badge/▶_Live_Demo-sayak--traders.vercel.app-22c55e?style=for-the-badge)](https://sayak-traders.vercel.app)
+
+[![Node.js](https://img.shields.io/badge/Node.js-18+-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-4-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Security](https://img.shields.io/badge/Security-24--layer_middleware_·_TOTP_2FA-brightgreen?style=flat-square&logo=letsencrypt&logoColor=white)](#-security-features)
+[![Tests](https://img.shields.io/badge/Security_Tests-70+-success?style=flat-square)](#)
+
+</div>
+
+---
+
+> **Note:** The app runs on Node.js + Express + SQLite with a vanilla-JS frontend (see [Tech Stack](#tech-stack)).
+
+## 🚀 Highlights
+
+### 🔐 Security Features
 - **24-Layer Security Middleware** - Complete enterprise-grade protection
 - **CSP with Nonces** - No unsafe-inline, dynamic nonce generation
 - **TOTP-based 2FA** - Two-factor authentication for admin users
