@@ -148,25 +148,48 @@ async function loadCashOnlyRetailers() {
     if (!tbody) return;
 
     try {
-        // This might be heavy if lots of retailers, but okay for prototype
-        const response = await apiRequest('/api/retailers');
-        if (!response) return;
+        // Fetch retailers and this month's per-retailer profit in parallel.
+        const [retailersRes, profitRes] = await Promise.all([
+            apiRequest('/api/retailers'),
+            apiRequest('/api/profit/by-retailer'),
+        ]);
+        if (!retailersRes) return;
 
-        const retailers = await response.json();
-        const cashOnly = retailers.filter(r => (r.credit_limit || 0) === 0);
+        const retailersData = await retailersRes.json();
+        // The API may return either a bare array or { retailers: [...] }.
+        const retailers = Array.isArray(retailersData)
+            ? retailersData
+            : (retailersData.retailers || []);
+
+        // Build a retailerId -> monthly profit map from the profit endpoint.
+        const profitById = {};
+        if (profitRes) {
+            try {
+                const profits = await profitRes.json();
+                (Array.isArray(profits) ? profits : []).forEach(p => {
+                    profitById[String(p.retailerId)] = p.profit || 0;
+                });
+            } catch (_) { /* profit is best-effort; fall back to 0 */ }
+        }
+
+        const creditLimitOf = r => r.creditLimit ?? r.credit_limit ?? 0;
+        const cashOnly = retailers.filter(r => (creditLimitOf(r) || 0) === 0);
 
         if (cashOnly.length === 0) {
             tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="padding: 20px;">No cash-only retailers</td></tr>';
             return;
         }
 
-        const rowsHtml = cashOnly.slice(0, 10).map(r => `
+        const rowsHtml = cashOnly.slice(0, 10).map(r => {
+            const profit = profitById[String(r._id ?? r.id)] ?? 0;
+            return `
             <tr>
                 <td><strong>${escapeHtml(r.name)}</strong></td>
                 <td>${escapeHtml(r.area || '-')}</td>
-                <td style="color: var(--success-color); font-weight: 600;">Monthly Profit Coming Soon</td>
+                <td style="color: var(--success-color); font-weight: 600;">+${formatCurrency(profit)}</td>
             </tr>
-        `).join('');
+        `;
+        }).join('');
 
         tbody.innerHTML = rowsHtml;
     } catch (error) {

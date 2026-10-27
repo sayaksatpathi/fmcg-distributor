@@ -312,47 +312,118 @@ function subscribe(handler) {
 }
 
 /**
- * Email notification handler (placeholder)
+ * Format an HTML email body for a security event.
  */
-function createEmailNotifier(config) {
+function formatEmailBody(event) {
+  const rows = Object.entries({
+    Type: event.type,
+    Severity: (event.severity || '').toUpperCase(),
+    IP: event.ip || 'unknown',
+    User: event.username || event.userId || '—',
+    Path: event.path || '—',
+    Time: event.timestamp,
+  })
+    .map(([k, v]) => `<tr><td style="padding:4px 12px;font-weight:600">${k}</td><td style="padding:4px 12px">${v}</td></tr>`)
+    .join('');
+  return `
+    <h2 style="color:#b91c1c">🚨 Security Alert: ${event.type}</h2>
+    <table style="border-collapse:collapse;font-family:sans-serif">${rows}</table>
+    <pre style="background:#f4f4f5;padding:12px;border-radius:6px">${JSON.stringify(event.details || {}, null, 2)}</pre>`;
+}
+
+/**
+ * Email notification handler.
+ *
+ * Sends via nodemailer when SMTP config is provided (config.smtp or SMTP_* env).
+ * If nodemailer is unavailable or SMTP is not configured, it logs and no-ops
+ * safely rather than throwing.
+ *
+ * config: { to, from, smtp }  (smtp falls back to env SMTP_HOST/PORT/USER/PASS)
+ */
+function createEmailNotifier(config = {}) {
+  const to = config.to || process.env.SECURITY_ALERT_EMAIL_TO;
+  const from = config.from || process.env.SECURITY_ALERT_EMAIL_FROM || 'security@fmcg-distributor';
+  const smtp = config.smtp || (process.env.SMTP_HOST
+    ? {
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT || 587),
+        secure: process.env.SMTP_SECURE === 'true',
+        auth: process.env.SMTP_USER
+          ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+          : undefined,
+      }
+    : null);
+
+  let transporter = null;
+  if (smtp && to) {
+    try {
+      // Lazy require so the module loads even when nodemailer isn't installed.
+      const nodemailer = require('nodemailer');
+      transporter = nodemailer.createTransport(smtp);
+    } catch (err) {
+      console.warn('[EMAIL] nodemailer unavailable — email alerts disabled:', err.message);
+    }
+  }
+
   return async (event) => {
-    // In production, integrate with nodemailer or email service
-    console.log(`[EMAIL] Would send to ${config.to}: ${event.type} - ${event.severity}`);
-    
-    // Example with nodemailer (uncomment and configure):
-    // const transporter = nodemailer.createTransport(config.smtp);
-    // await transporter.sendMail({
-    //   from: config.from,
-    //   to: config.to,
-    //   subject: `Security Alert: ${event.type}`,
-    //   html: formatEmailBody(event)
-    // });
+    if (!transporter || !to) {
+      console.warn(`[EMAIL] Not configured — skipped alert ${event.type} (${event.severity}).`);
+      return;
+    }
+    try {
+      await transporter.sendMail({
+        from,
+        to,
+        subject: `Security Alert: ${event.type} [${(event.severity || '').toUpperCase()}]`,
+        html: formatEmailBody(event),
+      });
+    } catch (err) {
+      console.error('[EMAIL] Failed to send security alert:', err.message);
+    }
   };
 }
 
 /**
- * Slack webhook notification handler (placeholder)
+ * Slack webhook notification handler.
+ *
+ * Posts a formatted message to an incoming webhook. The URL may be passed in or
+ * taken from SLACK_SECURITY_WEBHOOK_URL. No-ops safely when not configured.
  */
 function createSlackNotifier(webhookUrl) {
+  const url = webhookUrl || process.env.SLACK_SECURITY_WEBHOOK_URL;
   return async (event) => {
-    // In production, make HTTP request to Slack webhook
-    console.log(`[SLACK] Would send to webhook: ${event.type} - ${event.severity}`);
-    
-    // Example with fetch:
-    // await fetch(webhookUrl, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({
-    //     text: `🚨 Security Alert: ${event.type}`,
-    //     attachments: [{
-    //       color: event.severity === 'critical' ? 'danger' : 'warning',
-    //       fields: [
-    //         { title: 'IP', value: event.ip, short: true },
-    //         { title: 'Severity', value: event.severity, short: true }
-    //       ]
-    //     }]
-    //   })
-    // });
+    if (!url) {
+      console.warn(`[SLACK] No webhook configured — skipped alert ${event.type} (${event.severity}).`);
+      return;
+    }
+    try {
+      const resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: `🚨 Security Alert: ${event.type}`,
+          attachments: [
+            {
+              color: event.severity === SEVERITY.CRITICAL || event.severity === SEVERITY.ALERT
+                ? 'danger'
+                : 'warning',
+              fields: [
+                { title: 'Severity', value: (event.severity || '').toUpperCase(), short: true },
+                { title: 'IP', value: event.ip || 'unknown', short: true },
+                { title: 'User', value: event.username || event.userId || '—', short: true },
+                { title: 'Path', value: event.path || '—', short: true },
+                { title: 'Time', value: event.timestamp, short: false },
+              ],
+            },
+          ],
+        }),
+      });
+      if (!resp.ok) {
+        console.error(`[SLACK] Webhook responded ${resp.status}`);
+      }
+    } catch (err) {
+      console.error('[SLACK] Failed to post security alert:', err.message);
+    }
   };
 }
 
