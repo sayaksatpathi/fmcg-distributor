@@ -1,0 +1,22 @@
+# Self-hosted FORTRESS edition (Node.js + Express + SQLite).
+# Usage:  docker compose up --build   →  http://localhost:3000
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      DB_PATH: /data/distributor.db
+      # Provide a real 64-byte hex secret in production (e.g. via an .env file):
+      SESSION_SECRET: ${SESSION_SECRET:-change_this_to_a_64_byte_random_hex_string}
+      TOKEN_EXPIRY: 24h
+      RATE_LIMIT_WINDOW_MS: "900000"
+      RATE_LIMIT_MAX_REQUESTS: "100"
+    volumes:
+      - fmcg_data:/data
+    restart: unless-stopped
+
+volumes:
+  fmcg_data:

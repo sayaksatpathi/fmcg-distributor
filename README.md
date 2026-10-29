@@ -2,133 +2,114 @@
 
 # 📦 FMCG Distributor Control System
 
-### A comprehensive internal control system for FMCG distributors — retailers, inventory, sales, credit, and profit analysis, hardened with enterprise-grade security.
+### A security-hardened ERP for FMCG distributors — retailers, inventory, sales, credit, and **profit** (not just turnover) in one control panel.
 
 [![Live Demo](https://img.shields.io/badge/▶_Live_Demo-sayak--traders.vercel.app-22c55e?style=for-the-badge)](https://sayak-traders.vercel.app)
 
+[![CI](https://github.com/sayaksatpathi/fmcg-distributor/actions/workflows/ci.yml/badge.svg)](https://github.com/sayaksatpathi/fmcg-distributor/actions/workflows/ci.yml)
+[![Security Tests](https://img.shields.io/badge/Security_Tests-46_passing-brightgreen?style=flat-square&logo=checkmarx&logoColor=white)](tests/security.test.js)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
 [![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
-[![Security](https://img.shields.io/badge/Security-24--layer_middleware_·_TOTP_2FA-brightgreen?style=flat-square&logo=letsencrypt&logoColor=white)](#-security-features)
-[![Tests](https://img.shields.io/badge/Security_Tests-70+-success?style=flat-square)](#)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](docker-compose.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
 </div>
 
 ---
 
-> **Note:** The app runs on Node.js + Express + SQLite with a vanilla-JS frontend (see [Tech Stack](#tech-stack)).
+## Overview
 
-## 🚀 Highlights
+A complete internal control system for FMCG distributors to manage retailers, inventory,
+sales, credit exposure, and **profit analysis** — built with a serious focus on security.
+It ships in two editions that share the same frontend and domain model:
 
-### 🔐 Security Features
-- **24-Layer Security Middleware** - Complete enterprise-grade protection
-- **CSP with Nonces** - No unsafe-inline, dynamic nonce generation
-- **TOTP-based 2FA** - Two-factor authentication for admin users
-- **Security Event Notifications** - Real-time security monitoring
-- **70+ Automated Security Tests** - Comprehensive test coverage
+| Edition | Stack | Use it when |
+|---------|-------|-------------|
+| 🏰 **FORTRESS** (canonical) | Node.js · Express · **SQLite** | Self-hosting; full security hardening + the automated security test suite. `npm start` / `npm test`. |
+| ☁️ **Cloud** | Node.js · Express · **MongoDB** | Serverless deployment (the live demo runs this on Vercel, since SQLite doesn't persist on serverless). `cloud:*` scripts. |
 
-### 📊 New Business Features
+## ✨ Features
 
-| Feature | Description | Endpoint |
-|---------|-------------|----------|
-| **Reports & PDF Export** | Sales, profit, inventory, credit reports with export | `/api/reports/*` |
-| **Purchase Orders** | Track incoming stock from suppliers | `/api/purchase-orders/*` |
-| **Invoice Generation** | Generate and manage invoices for sales | `/api/invoices/*` |
-| **Inventory Alerts** | Low stock warnings, reorder points | `/api/inventory-alerts/*` |
-| **Payment Reminders** | Auto-remind retailers about dues | `/api/payment-reminders/*` |
-| **Sales Targets** | Set & track sales targets by salesperson | `/api/sales-targets/*` |
-| **Returns Management** | Handle product returns/damages | `/api/returns/*` |
-| **Data Backup/Restore** | One-click database backup | `/api/backup/*` |
-| **Dashboard Charts** | Visual graphs using Chart.js | Frontend |
-| **WhatsApp Integration** | Send invoices via WhatsApp | `/api/whatsapp/*` |
-| **Mobile Responsive** | Touch-friendly, responsive UI | CSS |
+**Business**
 
-## Features
-- Credit & Cash Flow Control
-- SKU Efficiency Tracking
-- Brand-wise Capital Allocation
-- Profit Analysis (not turnover)
-- Role-based Access Control
-- Excel Import Functionality
+| Feature | Endpoint |
+|---------|----------|
+| Reports & PDF export (sales, profit, inventory, credit) | `/api/reports/*` |
+| Purchase orders · Invoices · Returns | `/api/purchase-orders`, `/api/invoices`, `/api/returns` |
+| Inventory alerts (low-stock, reorder points) | `/api/inventory-alerts/*` |
+| Payment reminders · Sales targets | `/api/payment-reminders`, `/api/sales-targets` |
+| **Profit by retailer** (revenue − COGS) | `/api/profit/by-retailer` |
+| WhatsApp messaging (Cloud API / Twilio) | `/api/whatsapp/*` |
+| Data backup & restore · Excel import | `/api/backup/*` |
 
-## 📋 Prerequisites
+Plus: credit & cash-flow control, SKU efficiency tracking, brand-wise capital allocation,
+role-based access control, Chart.js dashboards, and a mobile-responsive UI.
 
-- Node.js >= 18.0.0
-- npm or yarn
+**Security** ([details](SECURITY.md))
 
-## Installation
+- 24-layer security middleware; **Helmet** headers + CSP with nonces (no `unsafe-inline`)
+- **TOTP-based 2FA** for admins (`speakeasy`); bcrypt password hashing; JWT auth
+- Input validation, SQL-injection / XSS / SSRF / open-redirect protection, rate limiting
+- Security-event notifications (email + Slack); **46 automated security tests, 100% passing**
 
-1. Install dependencies:
+## 🚀 Quickstart
+
+### FORTRESS (self-hosted)
+
 ```bash
 npm install
+cp .env.example .env          # then set a real 64-byte hex SESSION_SECRET
+npm start                     # → http://localhost:3000
 ```
 
-2. Copy environment file:
+### Docker (one command)
+
 ```bash
-cp .env.example .env
+docker compose up --build     # → http://localhost:3000
 ```
 
-3. Start the server:
+### Cloud edition (MongoDB)
+
 ```bash
-npm start
+npm run cloud:dev             # server/ (MongoDB) + client/ (Vite)
 ```
 
-## 🔧 Available Scripts
+> Seed demo data with `node scripts/seed-test-data.js`. **Change the seeded
+> credentials before exposing any instance.**
 
-| Script | Description |
-|--------|-------------|
-| `npm start` | Start the production server |
-| `npm run start:old` | Start the original server |
-| `npm run dev` | Start with auto-restart on changes |
-| `npm run init-db` | Initialize database tables |
+## 🧪 Testing & Quality
 
-## Default Login
+```bash
+npm run check                 # syntax-check every JS file
+npm test                      # boots the server, runs 46 security tests, shuts down
+```
 
-- Owner: username: `owner`, password: `owner123`
-- Accountant: username: `accountant`, password: `acc123`
-- Sales: username: `sales`, password: `sales123`
-
-**IMPORTANT:** Change default passwords after first login!
+CI runs the syntax check + security suite (server) and the client build on every push/PR —
+see [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ## 📁 Project Structure
 
 ```
-├── config/               # Configuration management
-├── middleware/           # Express middleware
-│   ├── cors.js           # CORS configuration
-│   ├── errorHandler.js   # Global error handling
-│   ├── logger.js         # Request logging
-│   ├── rateLimiter.js    # Rate limiting
-│   └── validators.js     # Input validation
-├── routes/               # API route modules
-├── scripts/              # Database scripts
-├── utils/                # Utility functions
-├── public/               # Frontend files
-├── uploads/              # File uploads
-├── server.new.js         # New improved server
-└── server.js             # Original server (legacy)
+src/        FORTRESS edition — config/, middleware/, routes/, utils/, server.js (SQLite)
+server/     Cloud edition — Express + Mongoose models/routes (deployed on Vercel)
+client/     React + Vite frontend
+public/     FORTRESS static frontend (HTML/CSS/JS)
+tests/      security.test.js (46 checks)
+scripts/    run-security-tests.js, check-syntax.js, seed-test-data.js
+docs/       Additional documentation
 ```
 
-## Tech Stack
-- Frontend: HTML + CSS + Vanilla JavaScript
-- Backend: Node.js + Express
-- Database: SQLite
+## 📡 Health Endpoints
 
-## 📡 API Health Endpoints
+`GET /api/health` · `/api/health/detailed` · `/api/health/ready` · `/api/health/live`
 
-- `GET /api/health` - Basic health check
-- `GET /api/health/detailed` - Detailed health with DB stats
-- `GET /api/health/ready` - Readiness probe
-- `GET /api/health/live` - Liveness probe
+## 📄 License
 
-## Pages
-0. Login & Role Control
-1. Owner Dashboard
-2. Retailer Master
-3. Brand & SKU Master
-4. Daily Dispatch / Bill Entry
-5. Credit Control Panel
-6. Profit Analysis
-7. Weekly Review (Owner Only)
-8. New Product Test
+[MIT](LICENSE) © Sayak Satpathi
 
+<div align="center">
+
+Built by **[Sayak Satpathi](https://github.com/sayaksatpathi)** · [Live Demo](https://sayak-traders.vercel.app)
+
+</div>

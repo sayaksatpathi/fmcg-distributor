@@ -169,7 +169,6 @@ async function importData() {
         resultsDiv.appendChild(alert);
     }
 }
-}
 
 async function performImport(type, data) {
     // This is a simplified import - in production, you'd want to validate and handle errors better
